@@ -64,5 +64,48 @@ class AssembleTests(unittest.TestCase):
         self.assertAlmostEqual(duration, 10.0, delta=0.5)
 
 
+class AssembleSmokeRejectionTests(unittest.TestCase):
+    """Smoke-render rejection runs before any ffmpeg call, so it is offline-safe."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.projects_root = Path(self._tmp.name)
+        ref = Path(self._tmp.name) / "ref.png"
+        ref.write_bytes(b"fake")
+        self.project = create_project(self.projects_root, "demo", ref)
+        self.project.shots = default_bedroom_plan()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _mark_all_done(self, smoke_indices=()):
+        pdir = self.projects_root / "demo"
+        (pdir / "output").mkdir(parents=True, exist_ok=True)
+        for shot in self.project.shots:
+            out_rel = f"output/shot_{shot.index}.mp4"
+            # Create placeholder files so the "missing output file" check passes
+            # and we reach the smoke gate specifically.
+            (pdir / out_rel).write_bytes(b"placeholder")
+            shot.status = "done"
+            shot.output = out_rel
+            shot.smoke = shot.index in smoke_indices
+        save_project(self.projects_root, self.project)
+
+    def test_assemble_rejects_smoke_shots(self):
+        # One shot is a smoke render -> assembly must refuse, naming the shot.
+        self._mark_all_done(smoke_indices=(2,))
+        with self.assertRaises(AssembleError) as ctx:
+            assemble_project(self.projects_root, self.project)
+        msg = str(ctx.exception)
+        self.assertIn("smoke", msg.lower())
+        self.assertIn("2", msg)
+
+    def test_assemble_rejects_when_all_shots_are_smoke(self):
+        self._mark_all_done(smoke_indices=(1, 2, 3))
+        with self.assertRaises(AssembleError) as ctx:
+            assemble_project(self.projects_root, self.project)
+        self.assertIn("smoke", str(ctx.exception).lower())
+
+
 if __name__ == "__main__":
     unittest.main()

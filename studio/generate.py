@@ -6,6 +6,7 @@ image-only ComfyUI output as a finished video.
 
 from __future__ import annotations
 
+import math
 import subprocess
 import tempfile
 from pathlib import Path
@@ -80,8 +81,91 @@ def _extract_last_frame(video_path: Path, out_png: Path) -> None:
         raise GenerateError(f"ffmpeg could not extract last frame from {video_path}: {res_rev.stderr}")
 
 
+# Duration tolerance expressed in whole frames. Container duration and exact
+# `-t` trimming can legitimately differ by about a frame, so allow a small
+# frame-count slack rather than a percentage of the target (a percentage lets
+# a grossly short clip slip through on long shots). At 24 fps, 2 frames ~= 83 ms.
+_DURATION_TOLERANCE_FRAMES = 2
+
+
+def _duration_tolerance_seconds(fps: int) -> float:
+    fps = fps if fps and fps > 0 else 24
+    return _DURATION_TOLERANCE_FRAMES / fps
+
+
+def _probe_duration(path: Path) -> float:
+    """Return the decoded container duration in seconds via ffprobe.
+
+    Raises GenerateError if the file is not decodable, or its duration is not a
+    finite positive number.
+    """
+    cmd_probe = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-show_entries",
+        "format=duration",
+        "-of",
+        "default=noprint_wrappers=1:nokey=1",
+        str(path),
+    ]
+    probe_res = subprocess.run(cmd_probe, capture_output=True, text=True)
+    if probe_res.returncode != 0:
+        raise GenerateError(
+            f"video {path.name} is not decodable by ffprobe: {probe_res.stderr}"
+        )
+    raw = probe_res.stdout.strip()
+    try:
+        dur = float(raw)
+    except ValueError:
+        raise GenerateError(f"video {path.name} has unreadable duration: {raw!r}")
+    # Reject NaN / +-inf and non-positive durations (e.g. ffprobe emitting
+    # "N/A" -> nan, or a zero-length/degenerate container).
+    if not math.isfinite(dur) or dur <= 0:
+        raise GenerateError(f"video {path.name} has invalid duration: {raw!r}")
+    return dur
+
+
+def _check_source_long_enough(source_dur: float, target: float | None, fps: int) -> None:
+    """Reject a source that cannot supply the full target cut.
+
+    ffmpeg `-t` trims to the *shorter* of source/target, so if the source is
+    meaningfully shorter than the target the trimmed shot would silently be too
+    short. A source within one tolerance window of the target is acceptable.
+    """
+    if target is None or target <= 0:
+        return
+    tol = _duration_tolerance_seconds(fps)
+    if source_dur < target - tol:
+        raise GenerateError(
+            f"source video is {source_dur:.3f}s but shot targets {target:.3f}s "
+            f"(tolerance {tol:.3f}s) — refusing to accept a clip too short for the planned cut"
+        )
+
+
+def _check_output_duration(actual: float, target: float | None, fps: int) -> None:
+    """Require the trimmed output duration to match the target within a few frames.
+
+    This rejects both over-short clips (degenerate/truncated renders) and any
+    output that otherwise fails to land on the planned cut length, which would
+    break the exact 3+4+3 = 10s assembly.
+    """
+    if target is None or target <= 0:
+        return
+    tol = _duration_tolerance_seconds(fps)
+    if abs(actual - target) > tol:
+        raise GenerateError(
+            f"output video is {actual:.3f}s but shot targets {target:.3f}s "
+            f"(tolerance {tol:.3f}s) — refusing to accept a render that misses the planned cut length"
+        )
+
+
 def _validate_and_save_video(
-    video_bytes: bytes, original_filename: str, out_path: Path, target_duration: float | None = None
+    video_bytes: bytes,
+    original_filename: str,
+    out_path: Path,
+    target_duration: float | None = None,
+    fps: int = 24,
 ) -> None:
     """Validate video decodability with ffprobe, trim to exact duration, and transcode to MP4."""
     ext = Path(original_filename).suffix.lower() or ".mp4"
@@ -90,30 +174,10 @@ def _validate_and_save_video(
         tmp_path = Path(tmp.name)
 
     try:
-        cmd_probe = [
-            "ffprobe",
-            "-v",
-            "error",
-            "-show_entries",
-            "format=duration",
-            "-of",
-            "default=noprint_wrappers=1:nokey=1",
-            str(tmp_path),
-        ]
-        probe_res = subprocess.run(cmd_probe, capture_output=True, text=True)
-        if probe_res.returncode != 0:
-            raise GenerateError(
-                f"downloaded video {original_filename} is not decodable by ffprobe: {probe_res.stderr}"
-            )
-
-        try:
-            dur = float(probe_res.stdout.strip())
-            if dur <= 0:
-                raise GenerateError(f"downloaded video {original_filename} has invalid duration <= 0")
-        except ValueError:
-            raise GenerateError(
-                f"downloaded video {original_filename} has unreadable duration: {probe_res.stdout.strip()}"
-            )
+        # 1. Source must be decodable with a finite positive duration, and long
+        # enough to supply the full planned cut (trimming cannot lengthen it).
+        source_dur = _probe_duration(tmp_path)
+        _check_source_long_enough(source_dur, target_duration, fps)
 
         out_path.parent.mkdir(parents=True, exist_ok=True)
         ffmpeg_cmd = ["ffmpeg", "-y", "-i", str(tmp_path)]
@@ -125,9 +189,13 @@ def _validate_and_save_video(
         if trans_res.returncode != 0:
             raise GenerateError(f"ffmpeg transcode/trim failed: {trans_res.stderr}")
 
-        verify_res = subprocess.run(cmd_probe[:-1] + [str(out_path)], capture_output=True, text=True)
-        if verify_res.returncode != 0 or not out_path.is_file() or out_path.stat().st_size == 0:
+        if not out_path.is_file() or out_path.stat().st_size == 0:
             raise GenerateError(f"output video {out_path} is invalid after transcode/trim")
+
+        # 2. The transcoded result must itself decode and land on the target cut
+        # within an explicit frame-based tolerance.
+        out_dur = _probe_duration(out_path)
+        _check_output_duration(out_dur, target_duration, fps)
     finally:
         if tmp_path.is_file():
             tmp_path.unlink()
@@ -143,6 +211,11 @@ def _input_image_for_shot(project: Project, pdir: Path, shot: Shot) -> Path:
     if prev.status != "done" or not prev.output:
         raise GenerateError(
             f"shot {shot.index} needs shot {prev.index} to be generated first for continuity"
+        )
+    if prev.smoke:
+        raise GenerateError(
+            f"shot {shot.index} cannot seed from shot {prev.index}: that shot is a smoke render, "
+            "not a production shot. Re-generate the previous shot without --smoke first."
         )
     prev_video = pdir / prev.output
     frame_path = pdir / "jobs" / f"shot_{shot.index}_seed.png"
@@ -228,10 +301,12 @@ def generate_shot(
             original_filename=video_output["filename"],
             out_path=out_path,
             target_duration=shot.duration,
+            fps=24,
         )
 
         shot.status = "done"
         shot.output = out_rel
+        shot.smoke = smoke
         shot.error = None
     except Exception as exc:  # noqa: BLE001 - surface any failure as a failed shot, never fake success
         shot.status = "failed"

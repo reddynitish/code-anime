@@ -24,6 +24,15 @@ def assemble_project(
     if missing:
         raise AssembleError(f"shots not yet generated: {missing}")
 
+    # Smoke renders are fast, low-res, execution-only clips. They must never be
+    # concatenated into a production cut — require real renders for every shot.
+    smoke_shots = [s.index for s in project.shots if getattr(s, "smoke", False)]
+    if smoke_shots:
+        raise AssembleError(
+            f"shots are smoke renders, not production shots: {smoke_shots}. "
+            "Re-generate them without --smoke before assembling the final cut."
+        )
+
     inputs: list[Path] = []
     for shot in sorted(project.shots, key=lambda s: s.index):
         path = pdir / shot.output

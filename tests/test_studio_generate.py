@@ -1,4 +1,5 @@
 import dataclasses
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -73,7 +74,9 @@ class GenerateTests(unittest.TestCase):
             }
             config = self._config_for(server)
 
-            video_bytes = self._make_test_video_bytes(1.0)
+            # Shot 1 in the default plan targets 3.0s; the fixture must supply a
+            # source at least that long or the (correct) duration gate rejects it.
+            video_bytes = self._make_test_video_bytes(3.0)
             server.state["view_files"]["shot1.mp4"] = video_bytes
             server.state["history"]["fake-prompt-1"] = {
                 "status": {"status_str": "success"},
@@ -153,6 +156,142 @@ class GenerateTests(unittest.TestCase):
             generate_shot(config, self.projects_root, "demo", 1, "anisora")
         reloaded = load_project(self.projects_root, "demo")
         self.assertEqual(reloaded.shot(1).status, "failed")
+
+    def test_smoke_render_cannot_seed_a_later_production_shot(self):
+        # A smoke render of shot 1 must NOT be usable as the continuity seed
+        # for shot 2 — otherwise a fast low-res smoke clip silently becomes the
+        # basis of a "production" shot. Tested directly on the continuity
+        # resolver so it is exercised even without ffmpeg/ComfyUI available.
+        from studio.generate import _input_image_for_shot
+        from studio.manifest import project_dir
+
+        project = load_project(self.projects_root, "demo")
+        shot1 = project.shot(1)
+        shot1.status = "done"
+        shot1.output = "output/shot_1.mp4"
+        shot1.smoke = True
+        save_project(self.projects_root, project)
+
+        pdir = project_dir(self.projects_root, "demo")
+        project = load_project(self.projects_root, "demo")
+        with self.assertRaises(GenerateError) as ctx:
+            _input_image_for_shot(project, pdir, project.shot(2))
+        self.assertIn("smoke render", str(ctx.exception))
+
+    def test_production_render_passes_the_smoke_seed_guard(self):
+        # Mirror image of the guard above: a non-smoke done shot is a valid seed,
+        # so continuity resolution proceeds past the smoke check (and only then
+        # hits the real ffmpeg/ComfyUI path). We assert the smoke guard did NOT
+        # fire by checking the error is about continuity extraction, not smoke.
+        from studio.generate import _input_image_for_shot
+        from studio.manifest import project_dir
+
+        project = load_project(self.projects_root, "demo")
+        shot1 = project.shot(1)
+        shot1.status = "done"
+        shot1.output = "output/shot_1.mp4"
+        shot1.smoke = False
+        save_project(self.projects_root, project)
+
+        pdir = project_dir(self.projects_root, "demo")
+        project = load_project(self.projects_root, "demo")
+        # The previous clip file does not exist, so extraction eventually fails —
+        # but the smoke guard must have passed first (no "smoke render" message).
+        with self.assertRaises(Exception) as ctx:
+            _input_image_for_shot(project, pdir, project.shot(2))
+        self.assertNotIn("smoke render", str(ctx.exception))
+
+    def test_check_output_duration_rejects_render_that_misses_target(self):
+        from studio.generate import _check_output_duration
+
+        # A near-single-frame clip (~0.04s) against a 3s target must be rejected.
+        with self.assertRaises(GenerateError):
+            _check_output_duration(0.04, 3.0, fps=24)
+        # A clip at half the target (the OLD lenient threshold) must now be
+        # rejected: a 1.5s output for a planned 3s shot breaks the 10s cut.
+        with self.assertRaises(GenerateError):
+            _check_output_duration(1.5, 3.0, fps=24)
+        # Even a small miss beyond the frame tolerance is rejected.
+        with self.assertRaises(GenerateError):
+            _check_output_duration(2.8, 3.0, fps=24)
+
+    def test_check_output_duration_accepts_only_on_target_within_frame_tolerance(self):
+        from studio.generate import _check_output_duration
+
+        # Exact target and within ~2 frames (at 24 fps, ~0.083s) must pass.
+        _check_output_duration(3.0, 3.0, fps=24)
+        _check_output_duration(2.95, 3.0, fps=24)
+        _check_output_duration(3.05, 3.0, fps=24)
+        # No target (or non-positive) means no duration gate.
+        _check_output_duration(0.01, None, fps=24)
+        _check_output_duration(0.01, 0.0, fps=24)
+
+    def test_check_source_long_enough_rejects_short_source(self):
+        from studio.generate import _check_source_long_enough
+
+        # Trimming cannot lengthen a source: a 1.5s source cannot yield a 3s cut.
+        with self.assertRaises(GenerateError):
+            _check_source_long_enough(1.5, 3.0, fps=24)
+        with self.assertRaises(GenerateError):
+            _check_source_long_enough(0.04, 3.0, fps=24)
+        # A source at/above the target (within frame tolerance) is fine, as is a
+        # longer source (it gets trimmed down by ffmpeg -t).
+        _check_source_long_enough(3.0, 3.0, fps=24)
+        _check_source_long_enough(2.95, 3.0, fps=24)
+        _check_source_long_enough(5.0, 3.0, fps=24)
+        _check_source_long_enough(0.5, None, fps=24)
+
+    def test_probe_duration_rejects_non_finite_and_non_positive(self):
+        import unittest.mock as mock
+
+        from studio.generate import _probe_duration
+
+        def fake_run(values):
+            completed = mock.Mock()
+            completed.returncode = 0
+            completed.stdout = values
+            completed.stderr = ""
+            return completed
+
+        for bad in ("nan", "inf", "-inf", "0", "-2.0", "N/A"):
+            with mock.patch("studio.generate.subprocess.run", return_value=fake_run(bad)):
+                with self.assertRaises(GenerateError):
+                    _probe_duration(Path("/tmp/whatever.mp4"))
+
+    @unittest.skipUnless(
+        shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg/ffprobe not installed"
+    )
+    def test_underlength_download_is_rejected_full_length_is_accepted(self):
+        # End-to-end proof through the real ffmpeg path: a 1.0s clip for the
+        # planned 3.0s shot 1 must be rejected, while a 3.0s clip is accepted.
+        def run_once(source_duration: float):
+            with FakeComfyServer() as server:
+                server.state["object_info"] = {
+                    "LoadImage": {},
+                    "VHS_VideoCombine": {},
+                    "CheckpointLoaderSimple": {
+                        "input": {"required": {"ckpt_name": [["anisora_v2.safetensors"]]}}
+                    },
+                }
+                config = self._config_for(server)
+                server.state["view_files"]["shot1.mp4"] = self._make_test_video_bytes(source_duration)
+                server.state["history"]["fake-prompt-1"] = {
+                    "status": {"status_str": "success"},
+                    "outputs": {
+                        "20": {"gifs": [{"filename": "shot1.mp4", "subfolder": "", "type": "output"}]}
+                    },
+                }
+                return generate_shot(config, self.projects_root, "demo", 1, "anisora")
+
+        # Underlength (1.0s vs planned 3.0s) -> rejected, shot marked failed.
+        with self.assertRaises(GenerateError):
+            run_once(1.0)
+        self.assertEqual(load_project(self.projects_root, "demo").shot(1).status, "failed")
+
+        # Full-length (3.0s) -> accepted.
+        shot = run_once(3.0)
+        self.assertEqual(shot.status, "done")
+        self.assertEqual(load_project(self.projects_root, "demo").shot(1).status, "done")
 
     def test_seedance_is_not_a_selectable_cli_backend(self):
         from studio.cli import build_parser

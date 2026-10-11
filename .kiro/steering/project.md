@@ -3,13 +3,13 @@
 ## Project Context
 - **Repository**: Private GitHub repo (`code-anime`).
 - **Core Mission**: Local-first, reproducible anime shot production workflow.
-- **Hardware Profile**: Apple Silicon M4, 16 GB unified memory. No remote GPU provided in Kiro Cloud environment.
+- **Hardware Profile**: Apple Silicon M4, 16 GB unified memory. GPU availability in the Kiro Cloud environment has not been verified.
 
 ## Environment & Boundary Constraints
 1. **Cloud & Network Boundaries**:
    - Kiro Cloud runs in a restricted repository-only network environment; external research and model weight downloads are blocked.
    - Kiro Cloud cannot reach Mac `localhost` / `127.0.0.1`. Do not attempt network calls to local Mac ports (e.g., ComfyUI on `8188` or studio server on `8787`).
-   - Do not hallucinate or assume GPU hardware in the cloud runtime.
+   - GPU availability in the cloud runtime has not been verified; do not assume GPU hardware is present.
 2. **Subprocess & CLI Preferences**:
    - Claude and Gemini must be invoked strictly via their CLIs (e.g. `agy` / CLI tools) or `loadout handoff`. Never attempt web browser automation unless explicitly requested by the user.
 3. **No Paid Services / New Subscriptions**:

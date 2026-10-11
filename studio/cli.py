@@ -75,6 +75,8 @@ def cmd_status(args: argparse.Namespace) -> int:
     print(f"Project {project.name!r} (reference: {project.reference_image})")
     for shot in project.shots:
         line = f"  shot {shot.index} [{shot.start}-{shot.end}s] backend={shot.backend} status={shot.status}"
+        if shot.smoke:
+            line += " (SMOKE — not a production render)"
         if shot.output:
             line += f" output={shot.output}"
         if shot.error:
@@ -92,7 +94,8 @@ def cmd_generate(args: argparse.Namespace) -> int:
     except (GenerateError, ProjectError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    print(f"shot {shot.index} done: {shot.output}")
+    suffix = " (SMOKE render — execution-only, not a production shot)" if shot.smoke else ""
+    print(f"shot {shot.index} done: {shot.output}{suffix}")
     return 0
 
 

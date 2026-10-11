@@ -37,6 +37,7 @@ class Shot:
     output: str | None = None  # path relative to project dir
     prompt_id: str | None = None
     error: str | None = None
+    smoke: bool = False  # True if the recorded output is a fast smoke render, not a production shot
 
     @property
     def duration(self) -> float:

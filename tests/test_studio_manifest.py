@@ -69,6 +69,35 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(loaded.shots[0].status, "planned")
         self.assertEqual(loaded.reference_image, "input/reference.png")
 
+    def test_smoke_flag_roundtrips_and_defaults_false(self):
+        project = create_project(self.projects_root, "demo", self.reference_image)
+        project.shots = default_bedroom_plan()
+        # Default must be False so a normal render is never treated as a smoke render.
+        self.assertFalse(project.shots[0].smoke)
+        project.shots[0].smoke = True
+        save_project(self.projects_root, project)
+
+        loaded = load_project(self.projects_root, "demo")
+        self.assertTrue(loaded.shots[0].smoke)
+        self.assertFalse(loaded.shots[1].smoke)
+
+    def test_load_legacy_manifest_without_smoke_key(self):
+        # Manifests written before the smoke field existed must still load.
+        project = create_project(self.projects_root, "legacy", self.reference_image)
+        project.shots = default_bedroom_plan()
+        save_project(self.projects_root, project)
+
+        mpath = self.projects_root / "legacy" / "manifest.json"
+        import json
+
+        data = json.loads(mpath.read_text())
+        for shot in data["shots"]:
+            shot.pop("smoke", None)
+        mpath.write_text(json.dumps(data))
+
+        loaded = load_project(self.projects_root, "legacy")
+        self.assertFalse(loaded.shots[0].smoke)
+
     def test_list_projects(self):
         create_project(self.projects_root, "demo1", self.reference_image)
         create_project(self.projects_root, "demo2", self.reference_image)
