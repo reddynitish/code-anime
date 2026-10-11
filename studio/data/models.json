@@ -1,0 +1,87 @@
+{
+  "backends": [
+    {
+      "key": "anisora",
+      "name": "AniSora (Index-AniSora anime video)",
+      "kind": "local_comfyui",
+      "enabled": true,
+      "disabled_reason": "AniSora custom nodes and weights not yet installed in ComfyUI",
+      "workflow_path": "runtime/workflows/anisora_i2v.json",
+      "required_object_info_classes": ["LoadImage", "SaveVideo"]
+    },
+    {
+      "key": "wan2.2",
+      "name": "Wan2.2 5B (image-to-video)",
+      "kind": "local_comfyui",
+      "enabled": true,
+      "workflow_path": "runtime/workflows/wan22_i2v.json",
+      "image_node_id": "56",
+      "image_node_class": "LoadImage",
+      "positive_prompt_node_id": "6",
+      "positive_prompt_input_key": "text",
+      "negative_prompt_node_id": "7",
+      "negative_prompt_input_key": "text",
+      "output_node_id": "58",
+      "output_node_class": "SaveVideo",
+      "output_keys": ["videos"],
+      "checkpoint_node_id": "37",
+      "checkpoint_node_class": "UNETLoader",
+      "checkpoint_input_key": "unet_name",
+      "required_checkpoint": "wan2.2_ti2v_5B_fp16.safetensors",
+      "required_object_info_classes": [
+        "LoadImage",
+        "SaveVideo",
+        "UNETLoader",
+        "CLIPLoader",
+        "VAELoader",
+        "CLIPTextEncode",
+        "ModelSamplingSD3",
+        "Wan22ImageToVideoLatent",
+        "KSampler",
+        "VAEDecode",
+        "CreateVideo"
+      ]
+    },
+    {
+      "key": "ltx",
+      "name": "LTX-Video 2B (image-to-video)",
+      "kind": "local_comfyui",
+      "enabled": true,
+      "workflow_path": "runtime/workflows/ltx_i2v.json",
+      "image_node_id": "78",
+      "image_node_class": "LoadImage",
+      "positive_prompt_node_id": "6",
+      "positive_prompt_input_key": "text",
+      "negative_prompt_node_id": "7",
+      "negative_prompt_input_key": "text",
+      "output_node_id": "81",
+      "output_node_class": "SaveVideo",
+      "output_keys": ["videos"],
+      "checkpoint_node_id": "44",
+      "checkpoint_node_class": "CheckpointLoaderSimple",
+      "checkpoint_input_key": "ckpt_name",
+      "required_checkpoint": "ltx-video-2b-v0.9.5.safetensors",
+      "required_object_info_classes": [
+        "LoadImage",
+        "SaveVideo",
+        "CheckpointLoaderSimple",
+        "CLIPLoader",
+        "CLIPTextEncode",
+        "LTXVImgToVideo",
+        "LTXVConditioning",
+        "LTXVScheduler",
+        "KSamplerSelect",
+        "SamplerCustom",
+        "VAEDecode",
+        "CreateVideo"
+      ]
+    },
+    {
+      "key": "seedance",
+      "name": "Seedance (cloud API)",
+      "kind": "cloud_disabled",
+      "enabled": false,
+      "disabled_reason": "Paid cloud video API. Disabled by project policy: no paid calls, no subscriptions, no account keys exposure."
+    }
+  ]
+}

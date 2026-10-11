@@ -1,0 +1,91 @@
+{
+  "out": "output/keyframes/bedroom_door_r2_mid",
+  "reference": "assets/references/ref3_latest_male_night.png",
+  "style": "Anime illustration in-betweening. Keep the EXACT camera angle, framing, room, furniture, art style, linework, night lighting and palette of the attached images. Young man: messy black hair, grey t-shirt, olive-green sweatpants, barefoot.",
+  "keys": [
+    {
+      "id": "m_a0_a1",
+      "seed": 100,
+      "images": [
+        "assets/references/ref3_latest_male_night.png",
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is lying on his back in bed, arm over forehead. Image 2: he is sitting up on the bed, legs swinging toward the edge. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    },
+    {
+      "id": "m_a1_a2",
+      "seed": 101,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png",
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_03.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is sitting up on the bed, legs swinging toward the edge. Image 2: he is sitting on the bed edge with bare feet on the floor. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    },
+    {
+      "id": "m_a2_a3",
+      "seed": 102,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_03.png",
+        "output/keyframes/bedroom_door_r1/k2_stand_05.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is sitting on the bed edge with bare feet on the floor. Image 2: he is standing beside the foot of the bed. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    },
+    {
+      "id": "m_a3_a4",
+      "seed": 103,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k2_stand_05.png",
+        "output/keyframes/bedroom_door_r1/k3_walk_05.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is standing beside the foot of the bed. Image 2: he is mid-stride walking toward the door. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    },
+    {
+      "id": "m_a4_a5",
+      "seed": 104,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k3_walk_05.png",
+        "output/keyframes/bedroom_door_r1/k4_handle_01.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is mid-stride walking toward the door. Image 2: he is at the door with his hand on the handle. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    },
+    {
+      "id": "m_a5_a6",
+      "seed": 105,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k4_handle_01.png",
+        "output/keyframes/bedroom_door_r1/k5_door_open_01.png"
+      ],
+      "prompt": "Two frames of the same animation are attached. Image 1: he is at the door with his hand on the handle. Image 2: he is in the doorway with the door pulled open. Draw the in-between animation frame EXACTLY halfway between image 1 and image 2: his body position, pose and limbs are halfway between the two. Same character, same room, same camera, same blanket and pillow arrangement as image 2 where possible. Exactly one person."
+    }
+  ],
+  "anchors": [
+    {
+      "id": "a0",
+      "file": "assets/references/ref3_latest_male_night.png"
+    },
+    {
+      "id": "a1",
+      "file": "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png"
+    },
+    {
+      "id": "a2",
+      "file": "output/keyframes/bedroom_door_r1/k1_sit_edge_03.png"
+    },
+    {
+      "id": "a3",
+      "file": "output/keyframes/bedroom_door_r1/k2_stand_05.png"
+    },
+    {
+      "id": "a4",
+      "file": "output/keyframes/bedroom_door_r1/k3_walk_05.png"
+    },
+    {
+      "id": "a5",
+      "file": "output/keyframes/bedroom_door_r1/k4_handle_01.png"
+    },
+    {
+      "id": "a6",
+      "file": "output/keyframes/bedroom_door_r1/k5_door_open_01.png"
+    }
+  ]
+}

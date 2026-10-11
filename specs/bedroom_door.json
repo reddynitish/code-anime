@@ -1,0 +1,12 @@
+{
+  "out": "output/keyframes/bedroom_door_r1",
+  "reference": "assets/references/ref3_latest_male_night.png",
+  "style": "Edit the attached anime illustration. Keep the EXACT same camera angle (high angle looking in through the open window), framing, room layout, furniture positions, art style, linework, night lighting, desk lamp glow, monitor glow and color palette. The same young man: messy black hair, grey t-shirt, olive-green sweatpants, barefoot. Exactly ONE person in the image. Change only his pose and position as described:",
+  "keys": [
+    {"id": "k1_sit_edge", "seed": 11, "prompt": "He is now sitting up on the right edge of the bed, facing the door, both bare feet on the wooden floor next to the slippers, hands resting on the mattress, blanket pushed aside."},
+    {"id": "k2_stand", "seed": 22, "prompt": "He is now standing on the wooden floor beside the bed, between the bed and the desk chair, body turned toward the door at the back right, the bed is empty with the rumpled blanket."},
+    {"id": "k3_walk", "seed": 33, "prompt": "He is mid-stride walking across the wooden floor toward the door at the back right, seen from behind at three-quarter angle, one foot forward. The bed is empty with the rumpled blanket."},
+    {"id": "k4_handle", "seed": 44, "prompt": "He is standing right in front of the closed door at the back right of the room, his right hand gripping the door handle, about to open it, seen from behind. The bed is empty with the rumpled blanket."},
+    {"id": "k5_door_open", "seed": 55, "prompt": "He has pulled the door open toward himself; the door is swung open about 70 degrees, revealing a dim hallway with warm light beyond. He stands in the doorway holding the handle, seen from behind. The bed is empty with the rumpled blanket."}
+  ]
+}

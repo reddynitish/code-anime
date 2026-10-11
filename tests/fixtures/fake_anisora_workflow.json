@@ -1,0 +1,22 @@
+{
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "anisora_v2.safetensors"}
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "placeholder positive prompt", "clip": ["4", 1]}
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "placeholder negative prompt", "clip": ["4", 1]}
+  },
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {"image": "placeholder.png"}
+  },
+  "20": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {"images": ["10", 0], "frame_rate": 24}
+  }
+}

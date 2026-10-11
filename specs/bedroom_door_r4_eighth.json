@@ -1,0 +1,223 @@
+{
+  "out": "output/keyframes/bedroom_door_r4_eighth",
+  "reference": "assets/references/ref3_latest_male_night.png",
+  "style": "Anime illustration in-betweening. Keep the EXACT camera angle, framing, room, furniture, art style, linework, night lighting and palette of the attached images. Young man: messy black hair, grey t-shirt, olive-green sweatpants, barefoot.",
+  "keys": [
+    {
+      "id": "e_00_01",
+      "seed": 500,
+      "images": [
+        "assets/references/ref3_latest_male_night.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_00_01_01.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_01_02",
+      "seed": 501,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_00_01_01.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a0_a1_04.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_02_03",
+      "seed": 502,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a0_a1_04.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_01_02_02.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_03_04",
+      "seed": 503,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_01_02_02.png",
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_04_05",
+      "seed": 504,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_02_03_02.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_05_06",
+      "seed": 505,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_02_03_02.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a1_a2_01.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_06_07",
+      "seed": 506,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a1_a2_01.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_03_04_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_07_08",
+      "seed": 507,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_03_04_05.png",
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_03.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_08_09",
+      "seed": 508,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k1_sit_edge_03.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_04_05_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_09_10",
+      "seed": 509,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_04_05_05.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a2_a3_03.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_10_11",
+      "seed": 510,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a2_a3_03.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_05_06_01.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_11_12",
+      "seed": 511,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_05_06_01.png",
+        "output/keyframes/bedroom_door_r1/k2_stand_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_12_13",
+      "seed": 512,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k2_stand_05.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_06_07_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_13_14",
+      "seed": 513,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_06_07_05.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a3_a4_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_14_15",
+      "seed": 514,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a3_a4_05.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_07_08_04.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_15_16",
+      "seed": 515,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_07_08_04.png",
+        "output/keyframes/bedroom_door_r1/k3_walk_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_16_17",
+      "seed": 516,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k3_walk_05.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_08_09_00.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_17_18",
+      "seed": 517,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_08_09_00.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a4_a5_03.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_18_19",
+      "seed": 518,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a4_a5_03.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_09_10_03.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_19_20",
+      "seed": 519,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_09_10_03.png",
+        "output/keyframes/bedroom_door_r1/k4_handle_01.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_20_21",
+      "seed": 520,
+      "images": [
+        "output/keyframes/bedroom_door_r1/k4_handle_01.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_10_11_04.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_21_22",
+      "seed": 521,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_10_11_04.png",
+        "output/keyframes/bedroom_door_r2_mid/m_a5_a6_05.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_22_23",
+      "seed": 522,
+      "images": [
+        "output/keyframes/bedroom_door_r2_mid/m_a5_a6_05.png",
+        "output/keyframes/bedroom_door_r3_quarter/q_11_12_04.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    },
+    {
+      "id": "e_23_24",
+      "seed": 523,
+      "images": [
+        "output/keyframes/bedroom_door_r3_quarter/q_11_12_04.png",
+        "output/keyframes/bedroom_door_r1/k5_door_open_01.png"
+      ],
+      "prompt": "Two consecutive frames of the same hand-drawn anime animation are attached. Draw the single in-between frame exactly halfway between image 1 and image 2: every limb, the head and the body position are halfway between the two. Keep the blanket, pillow, door and all props as in the images. Exactly one person."
+    }
+  ]
+}

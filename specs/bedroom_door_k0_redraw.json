@@ -1,0 +1,9 @@
+{
+  "out": "output/keyframes/bedroom_door_k0_redraw",
+  "reference": "assets/references/ref3_latest_male_night.png",
+  "style": "Anime illustration. Keep the EXACT camera angle, framing, room, furniture, art style, linework, night lighting and palette of the attached images. Young man: messy black hair, grey t-shirt, olive-green sweatpants, barefoot.",
+  "keys": [
+    {"id": "k0_lying", "seed": 700, "images": ["assets/references/ref3_latest_male_night.png", "output/keyframes/bedroom_door_r1/k1_sit_edge_05.png"],
+     "prompt": "Redraw image 1 exactly: the young man lying on his back on the bed, right arm resting over his forehead, legs on the blanket, same pose and position as image 1. Match the rendering, colors and line quality of image 2. Exactly one person."}
+  ]
+}

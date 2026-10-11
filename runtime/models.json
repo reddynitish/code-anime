@@ -1,0 +1,160 @@
+{
+  "backends": [
+    {
+      "key": "ltx",
+      "name": "LTX-Video 2B (image-to-video)",
+      "kind": "local_comfyui",
+      "enabled": true,
+      "status": "ready",
+      "license": "Lightricks Open Source Model License",
+      "source": "https://huggingface.co/Lightricks/LTX-Video",
+      "hardware_fit": "Viable on Apple Silicon M4 16GB with --lowvram: checkpoint 5.91 GB + T5-XXL fp8 4.89 GB ≈ 10.8 GB weights. MUST use t5xxl_fp8_e4m3fn — the fp16 variant is 9.12 GB and would total ~15 GB leaving no headroom for activations.",
+      "workflow_path": "runtime/workflows/ltx_i2v.json",
+      "image_node_id": "78",
+      "image_node_class": "LoadImage",
+      "positive_prompt_node_id": "6",
+      "positive_prompt_input_key": "text",
+      "negative_prompt_node_id": "7",
+      "negative_prompt_input_key": "text",
+      "output_node_id": "81",
+      "output_node_class": "SaveVideo",
+      "output_keys": ["videos"],
+      "checkpoint_node_id": "44",
+      "checkpoint_node_class": "CheckpointLoaderSimple",
+      "checkpoint_input_key": "ckpt_name",
+      "required_checkpoint": "ltx-video-2b-v0.9.5.safetensors",
+      "required_files": [
+        {
+          "role": "checkpoint",
+          "filename": "ltx-video-2b-v0.9.5.safetensors",
+          "target_dir": "ComfyUI/models/checkpoints",
+          "size_bytes": 5910000000,
+          "size_human": "~5.91 GB",
+          "url": "https://huggingface.co/Lightricks/LTX-Video/resolve/main/ltx-video-2b-v0.9.5.safetensors"
+        },
+        {
+          "role": "text_encoder",
+          "filename": "t5xxl_fp8_e4m3fn.safetensors",
+          "target_dir": "ComfyUI/models/clip",
+          "size_bytes": 4890000000,
+          "size_human": "~4.89 GB (fp8 required — t5xxl_fp16 is 9.12 GB and does NOT fit 16 GB unified RAM alongside the checkpoint)",
+          "url": "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn.safetensors"
+        }
+      ],
+      "required_object_info_classes": [
+        "LoadImage",
+        "SaveVideo",
+        "CheckpointLoaderSimple",
+        "CLIPLoader",
+        "CLIPTextEncode",
+        "LTXVImgToVideo",
+        "LTXVConditioning",
+        "LTXVScheduler",
+        "KSamplerSelect",
+        "SamplerCustom",
+        "VAEDecode",
+        "CreateVideo"
+      ],
+      "free_hosted_demo_url": "https://huggingface.co/spaces/Lightricks/LTX-Video"
+    },
+    {
+      "key": "wan2.2",
+      "name": "Wan2.2 5B (image-to-video)",
+      "kind": "local_comfyui",
+      "enabled": true,
+      "status": "runtime_installed_weights_missing",
+      "license": "Apache 2.0",
+      "source": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged",
+      "hardware_fit": "CAUTION: Wan 5B fp16 (~10.5 GB) + VAE (~1.4 GB) + umt5 fp8 (~5 GB) ≈ 16.9 GB before activations — will OOM on 16 GB unless UNETLoader node 37 weight_dtype is changed from 'default' to 'fp8_e4m3fn'. Current workflow does NOT set fp8 — do not attempt without fixing wan22_i2v.json first.",
+      "workflow_path": "runtime/workflows/wan22_i2v.json",
+      "image_node_id": "56",
+      "image_node_class": "LoadImage",
+      "positive_prompt_node_id": "6",
+      "positive_prompt_input_key": "text",
+      "negative_prompt_node_id": "7",
+      "negative_prompt_input_key": "text",
+      "output_node_id": "58",
+      "output_node_class": "SaveVideo",
+      "output_keys": ["videos"],
+      "checkpoint_node_id": "37",
+      "checkpoint_node_class": "UNETLoader",
+      "checkpoint_input_key": "unet_name",
+      "required_checkpoint": "wan2.2_ti2v_5B_fp16.safetensors",
+      "required_files": [
+        {
+          "role": "diffusion_model",
+          "filename": "wan2.2_ti2v_5B_fp16.safetensors",
+          "target_dir": "ComfyUI/models/diffusion_models",
+          "size_bytes": 10500000000,
+          "size_human": "~10.5 GB",
+          "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged"
+        },
+        {
+          "role": "text_encoder",
+          "filename": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+          "target_dir": "ComfyUI/models/text_encoders",
+          "size_bytes": 5000000000,
+          "size_human": "~5.0 GB",
+          "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged"
+        },
+        {
+          "role": "vae",
+          "filename": "wan2.2_vae.safetensors",
+          "target_dir": "ComfyUI/models/vae",
+          "size_bytes": 1400000000,
+          "size_human": "~1.4 GB",
+          "url": "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged"
+        }
+      ],
+      "required_object_info_classes": [
+        "LoadImage",
+        "SaveVideo",
+        "UNETLoader",
+        "CLIPLoader",
+        "VAELoader",
+        "CLIPTextEncode",
+        "ModelSamplingSD3",
+        "Wan22ImageToVideoLatent",
+        "KSampler",
+        "VAEDecode",
+        "CreateVideo"
+      ],
+      "free_hosted_demo_url": "https://huggingface.co/spaces/Wan-AI/Wan2.1"
+    },
+    {
+      "key": "anisora",
+      "name": "AniSora (Index-AniSora anime video)",
+      "kind": "local_comfyui",
+      "enabled": false,
+      "status": "custom_nodes_and_weights_missing",
+      "license": "Apache 2.0",
+      "source": "https://github.com/bilibili/Index-anisora",
+      "hardware_fit": "Unknown — requires community ComfyUI custom node + model weights (>10 GB). Custom node not installed.",
+      "workflow_path": "runtime/workflows/anisora_i2v.json",
+      "required_files": [
+        {
+          "role": "model",
+          "note": "UNVERIFIED: 'anisora_v2.safetensors' does not exist at this URL. Check https://huggingface.co/bilibili/Index-anisora for actual available files (model.safetensors shards). Do not download without verifying filename.",
+          "filename": "UNKNOWN_verify_before_download",
+          "target_dir": "ComfyUI/models/checkpoints",
+          "size_human": ">10 GB (unverified)",
+          "url": "https://huggingface.co/bilibili/Index-anisora"
+        }
+      ],
+      "required_object_info_classes": [
+        "LoadImage",
+        "SaveVideo"
+      ],
+      "disabled_reason": "AniSora custom nodes not installed; checkpoint filename unverified — do not enable until both are resolved.",
+      "free_hosted_demo_url": "https://github.com/bilibili/Index-anisora"
+    },
+    {
+      "key": "seedance",
+      "name": "Seedance (cloud API)",
+      "kind": "cloud_disabled",
+      "enabled": false,
+      "status": "disabled_by_policy",
+      "disabled_reason": "Paid cloud video API. Disabled by project policy: no paid calls, no subscriptions, no account keys exposure."
+    }
+  ]
+}

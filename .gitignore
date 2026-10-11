@@ -1,0 +1,25 @@
+.DS_Store
+.env*
+.venv
+__pycache__
+*.pyc
+
+# Model weights
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+
+# Outputs and runtime
+output/
+runtime/*.pid
+runtime/*.log
+studio/projects/
+
+# Handoffs
+docs/handoff/
+.handoff/
+
+# 2D assets (preserve reference.png)
+assets/2d/
+!assets/reference.png
