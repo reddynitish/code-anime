@@ -12,9 +12,11 @@
    - GPU availability in the cloud runtime has not been verified; do not assume GPU hardware is present.
 2. **Subprocess & CLI Preferences**:
    - Claude and Gemini must be invoked strictly via their CLIs (e.g. `agy` / CLI tools) or `loadout handoff`. Never attempt web browser automation unless explicitly requested by the user.
-3. **No Paid Services / New Subscriptions**:
-   - Zero paid cloud API calls allowed (Seedance backend is permanently disabled by policy).
-   - Only free, local generation tools or pre-existing configured pipelines are permitted.
+3. **No New Spending / Subscriptions; Existing Luminal Credits Allowed Within Caps**:
+   - No new paid cloud API calls, no new subscriptions, and no new accounts (the Seedance backend remains permanently disabled by policy).
+   - Exception: **existing, already-purchased Luminal image credits may be used** for image generation (character references, backgrounds, props, storyboards), subject to an explicit **per-batch cap** agreed before each batch. Spending must stay within already-owned credits — never top up, upgrade, or add a subscription.
+   - Luminal is an **image** generator only; it is NOT a verified video generator. Do not route video generation through it, and do not assume its API/endpoint details until they are documented.
+   - Record generation cost (estimated or actual, with units) and per-batch totals so credit usage stays auditable and within cap. Favour free, local tools whenever they suffice.
 4. **Drawing & Asset Policy**:
    - Never reuse rejected old 2D drawings or hallucinate continuity.
    - Multi-frame sequences must maintain true visual continuity and character consistency.
