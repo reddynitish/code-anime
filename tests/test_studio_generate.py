@@ -154,6 +154,71 @@ class GenerateTests(unittest.TestCase):
         reloaded = load_project(self.projects_root, "demo")
         self.assertEqual(reloaded.shot(1).status, "failed")
 
+    def test_smoke_render_cannot_seed_a_later_production_shot(self):
+        # A smoke render of shot 1 must NOT be usable as the continuity seed
+        # for shot 2 — otherwise a fast low-res smoke clip silently becomes the
+        # basis of a "production" shot. Tested directly on the continuity
+        # resolver so it is exercised even without ffmpeg/ComfyUI available.
+        from studio.generate import _input_image_for_shot
+        from studio.manifest import project_dir
+
+        project = load_project(self.projects_root, "demo")
+        shot1 = project.shot(1)
+        shot1.status = "done"
+        shot1.output = "output/shot_1.mp4"
+        shot1.smoke = True
+        save_project(self.projects_root, project)
+
+        pdir = project_dir(self.projects_root, "demo")
+        project = load_project(self.projects_root, "demo")
+        with self.assertRaises(GenerateError) as ctx:
+            _input_image_for_shot(project, pdir, project.shot(2))
+        self.assertIn("smoke render", str(ctx.exception))
+
+    def test_production_render_passes_the_smoke_seed_guard(self):
+        # Mirror image of the guard above: a non-smoke done shot is a valid seed,
+        # so continuity resolution proceeds past the smoke check (and only then
+        # hits the real ffmpeg/ComfyUI path). We assert the smoke guard did NOT
+        # fire by checking the error is about continuity extraction, not smoke.
+        from studio.generate import _input_image_for_shot
+        from studio.manifest import project_dir
+
+        project = load_project(self.projects_root, "demo")
+        shot1 = project.shot(1)
+        shot1.status = "done"
+        shot1.output = "output/shot_1.mp4"
+        shot1.smoke = False
+        save_project(self.projects_root, project)
+
+        pdir = project_dir(self.projects_root, "demo")
+        project = load_project(self.projects_root, "demo")
+        # The previous clip file does not exist, so extraction eventually fails —
+        # but the smoke guard must have passed first (no "smoke render" message).
+        with self.assertRaises(Exception) as ctx:
+            _input_image_for_shot(project, pdir, project.shot(2))
+        self.assertNotIn("smoke render", str(ctx.exception))
+
+    def test_check_output_duration_rejects_truncated_render(self):
+        from studio.generate import _check_output_duration
+
+        # A near-single-frame clip (~0.04s) against a 3s target must be rejected.
+        with self.assertRaises(GenerateError):
+            _check_output_duration(0.04, 3.0)
+        # Just under the half-target threshold is also rejected.
+        with self.assertRaises(GenerateError):
+            _check_output_duration(1.49, 3.0)
+
+    def test_check_output_duration_accepts_full_length_render(self):
+        from studio.generate import _check_output_duration
+
+        # At/above the threshold, and the exact target, must pass.
+        _check_output_duration(3.0, 3.0)
+        _check_output_duration(2.95, 3.0)
+        _check_output_duration(1.5, 3.0)
+        # No target (or non-positive) means no duration gate.
+        _check_output_duration(0.01, None)
+        _check_output_duration(0.01, 0.0)
+
     def test_seedance_is_not_a_selectable_cli_backend(self):
         from studio.cli import build_parser
 

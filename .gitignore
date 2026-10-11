@@ -23,3 +23,7 @@ docs/handoff/
 # 2D assets (preserve reference.png)
 assets/2d/
 !assets/reference.png
+
+# Rejected reference attempts (never reuse)
+assets/references/ref1_blender_attempt.png
+assets/references/ref2_luminal_drawings.png

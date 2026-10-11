@@ -18,7 +18,7 @@ Perform a code review of the `studio/` subsystem and prepare the next local gene
 - **Kiro Cloud Network & Host Isolation**:
   - Kiro Cloud cannot access Mac `localhost:8188` (ComfyUI) or `localhost:8787` (Studio server).
   - Repository-only network access: no external research, downloads, or external APIs.
-  - No GPU is provided in Kiro Cloud; mock or unit-test offline logic rather than assuming GPU availability.
+  - GPU availability in Kiro Cloud has not been verified; mock or unit-test offline logic rather than assuming GPU availability.
 - **CLI-Only Policy**: Use Claude/Gemini strictly via CLI; no web browser automation unless explicitly requested.
 - **Cost & Assets**: No paid calls or new subscriptions. Never reuse rejected old 2D drawings.
 - **Labor Delegation**: Labor tasks delegated to Kiro / subagents; main agent reviews and verifies all code before acceptance.
