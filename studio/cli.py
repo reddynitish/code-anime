@@ -13,9 +13,10 @@ from pathlib import Path
 
 from studio.assemble import AssembleError, assemble_project
 from studio.assets import (
+    ASSET_KINDS,
     REVIEW_STATES,
     AssetError,
-    import_sidecars,
+    import_job_sidecars,
     load_registry,
     save_registry,
 )
@@ -214,17 +215,38 @@ def cmd_server(args: argparse.Namespace) -> int:
     return 0
 
 
+def _parse_classification(pairs: list[str] | None) -> dict[str, str]:
+    """Parse repeated --classify key=kind (or output_path=kind) arguments."""
+    mapping: dict[str, str] = {}
+    for raw in pairs or []:
+        if "=" not in raw:
+            raise AssetError(f"--classify expects key=kind, got {raw!r}")
+        k, kind = raw.split("=", 1)
+        k, kind = k.strip(), kind.strip()
+        if not k or not kind:
+            raise AssetError(f"--classify expects non-empty key=kind, got {raw!r}")
+        mapping[k] = kind
+    return mapping
+
+
 def cmd_assets_import(args: argparse.Namespace) -> int:
     registry_dir = _registry_dir(args)
     try:
+        classification = _parse_classification(args.classify)
         registry = load_registry(registry_dir)
-        added = import_sidecars(registry, Path(args.sidecar_dir))
+        touched, created, updated = import_job_sidecars(
+            registry,
+            Path(args.sidecar_dir),
+            default_kind=args.kind,
+            classification=classification,
+            asset_root=Path(args.asset_root) if args.asset_root else None,
+        )
         save_registry(registry_dir, registry)
     except AssetError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    print(f"imported {len(added)} asset(s) into {registry_dir}:")
-    for a in added:
+    print(f"imported {len(touched)} output(s) into {registry_dir} ({created} new, {updated} updated):")
+    for a in touched:
         print(f"  {a.asset_id}  [{a.kind}]  {a.path}  review={a.review_state}")
     return 0
 
@@ -247,7 +269,10 @@ def cmd_assets_list(args: argparse.Namespace) -> int:
         print("no assets")
         return 0
     for a in assets:
-        cost = f"{a.cost.amount}{a.cost.unit}" + ("" if a.cost.recorded else " est")
+        cost = (
+            f"reserved={a.cost.reserved:.4f}{a.cost.unit} "
+            f"charged={a.cost.charged:.4f}{a.cost.unit} (provider-reported)"
+        )
         ids = []
         if a.character_id:
             ids.append(f"char={a.character_id}")
@@ -317,7 +342,25 @@ def build_parser() -> argparse.ArgumentParser:
     assets_sub = p_assets.add_subparsers(dest="assets_command", required=True)
 
     p_ai = assets_sub.add_parser("import", help="import keyframe job sidecars (*.json) from a directory")
-    p_ai.add_argument("sidecar_dir", help="directory containing *.json sidecar files")
+    p_ai.add_argument("sidecar_dir", help="directory containing *.json job-record sidecar files")
+    p_ai.add_argument(
+        "--kind",
+        required=True,
+        choices=list(ASSET_KINDS),
+        help="default kind for imported outputs (job records carry no kind)",
+    )
+    p_ai.add_argument(
+        "--classify",
+        action="append",
+        default=None,
+        metavar="KEY=KIND",
+        help="override kind for a specific job key or exact output path (repeatable)",
+    )
+    p_ai.add_argument(
+        "--asset-root",
+        default=None,
+        help="approved root; absolute outputs are normalized only when resolved inside it",
+    )
     p_ai.add_argument("--registry-dir", default=None, help="registry location (default: <projects_root>/assets)")
     p_ai.set_defaults(func=cmd_assets_import)
 
