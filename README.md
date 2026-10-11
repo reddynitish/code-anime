@@ -28,6 +28,66 @@ The `studio/` package provides a local, free, reproducible anime shot production
 - `docs/PLAN.md`: Shot planning and production breakdown.
 - `docs/PIPELINE_V2.md`: Pipeline v2 notes.
 
+## Project Status & Hackathon Prototype
+
+This repository contains a pre-existing anime production and scene prototype that was extended during the hackathon with:
+1. **Free Cloud GPU Video Orchestration (Wan 2.2)**: Bounded headless ComfyUI automation via Kaggle's free GPU tier (`scripts/kaggle_wan.py`, `kaggle/wan_runner.py`) and Hugging Face ZeroGPU fallback (`scripts/hf_wan_flf.py`).
+2. **High-Fidelity Production Keyframing (Luminal & Ideogram 4.5)**: Strategic keyframe and turnaround asset generation specs (`specs/luminal_production_batch.json`, `docs/LUMINAL_PRODUCTION.md`, `scripts/keyframes.py`).
+3. **Automated Demo Composition & Audio**: Programmatic demo video rendering and soundtrack synthesis (`scripts/demo_video/render_demo_90s.py`, `scripts/demo_audio/generate_music.py`).
+
+### Final Uploaded Demo
+- **Demo Video**: [https://youtu.be/QreVPrYYzyM](https://youtu.be/QreVPrYYzyM)
+
+---
+
+## How to Run
+
+### 1. Kaggle Wan 2.2 Video Generation (Free GPU)
+Ensure Kaggle credentials are configured in `~/.kaggle/kaggle.json` or `KAGGLE_API_TOKEN` (never committed or exposed).
+```bash
+# 1. Prepare and stage jobs offline (validates paths, creates dataset & kernel metadata)
+python3 scripts/kaggle_wan.py prepare --jobs kaggle/jobs_bedroom_door_final.json --owner <kaggle_username>
+
+# 2. Submit to Kaggle GPU kernel
+python3 scripts/kaggle_wan.py submit
+
+# 3. Poll kernel execution status
+python3 scripts/kaggle_wan.py status --poll --timeout 1800
+
+# 4. Download generated video takes once finished
+python3 scripts/kaggle_wan.py download --out-dir output/wan_kaggle/
+```
+Detailed guide: [docs/KAGGLE_WAN.md](docs/KAGGLE_WAN.md)
+
+### 2. Luminal Production Asset Generation
+Luminal authentication resides outside the repository in `~/.config/code-anime/luminal.json`.
+```bash
+# Preview batch specification (dry-run)
+python3 scripts/keyframes.py specs/luminal_production_batch.json --cap 16.00 --dry-run
+
+# Run bounded batch asset generation (character turnarounds & macro keyframes)
+python3 scripts/keyframes.py specs/luminal_production_batch.json --cap 16.00
+```
+Detailed guide: [docs/LUMINAL_PRODUCTION.md](docs/LUMINAL_PRODUCTION.md)
+
+### 3. Local Studio Workflow & Doctor
+```bash
+# Check local environment (ComfyUI, ffmpeg, model weights)
+python3 -m studio doctor
+
+# Plan and assemble shots locally
+python3 -m studio plan --project bedroom --scene "Character waking up and walking to door"
+python3 -m studio assemble --project bedroom
+```
+
+### 4. Running Offline Unit Tests
+```bash
+python3 -m unittest discover -s tests
+```
+
+---
+
 ## Historical: Procedural 3D Bedroom Prototype
 
 An earlier procedural 3D cel-shaded prototype in Blender (`scripts/build_scene.py`, `scripts/render.sh`) based on `assets/reference.png`. Kept strictly for historical and staging reference; superseded by the open-weights video studio pipeline.
+

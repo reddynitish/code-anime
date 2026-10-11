@@ -1,0 +1,218 @@
+{
+  "out": "output/keyframes/production_batch_v1",
+  "reference": "assets/references/ref3_latest_male_night.png",
+  "style": "Anime illustration, high aesthetic quality, clean line art, cinematic night lighting. Same young adult male character: messy black hair, grey crewneck t-shirt, olive-green sweatpants, barefoot. Maintain identical art style, palette, and anatomy.",
+  "phases": {
+    "phase_1_review": ["char_turn_front", "char_turn_profile_r", "hand_handle_grip_macro", "door_swing_45deg", "bg_clean_plate_room", "wan_ctrl_wake_sit", "wan_ctrl_walk_mid", "wan_ctrl_door_open"],
+    "phase_2_character_turnarounds": ["char_turn_front", "char_turn_three_quarter_r", "char_turn_profile_r", "char_turn_back_r", "char_turn_back", "char_turn_back_l", "char_turn_profile_l", "char_turn_three_quarter_l"],
+    "phase_3_hands_interactions": ["hand_handle_approach", "hand_handle_grip_macro", "hand_handle_turn_down", "hand_handle_push_pull", "feet_bare_floor_step", "bed_edge_hand_plant"],
+    "phase_4_room_door_angles": ["bg_clean_plate_room", "bg_door_hallway_empty", "door_swing_15deg", "door_swing_30deg", "door_swing_45deg", "door_swing_60deg", "door_swing_75deg", "door_hallway_spill_90deg"],
+    "phase_5_wan_i2v_shot_controls": ["wan_ctrl_bed_wake", "wan_ctrl_wake_sit", "wan_ctrl_sit_edge", "wan_ctrl_rise_stand", "wan_ctrl_walk_start", "wan_ctrl_walk_mid", "wan_ctrl_door_reach", "wan_ctrl_door_turn", "wan_ctrl_door_pull", "wan_ctrl_door_open"]
+  },
+  "budget": {
+    "quality": "high",
+    "unit_price_usd": 0.20,
+    "phase_1_images": 8,
+    "phase_1_cost_usd": 1.60,
+    "resumption_images": 48,
+    "resumption_cost_usd": 9.60,
+    "expected_total_images": 56,
+    "expected_total_cost_usd": 11.20,
+    "maximum_images_cap": 80,
+    "maximum_cost_cap_usd": 16.00
+  },
+  "keys": [
+    {
+      "id": "char_turn_front",
+      "seed": 101,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body front view of the young adult man standing straight against a neutral soft-lit studio background. Messy black hair, neutral expression, grey crewneck t-shirt, loose olive-green sweatpants, barefoot. Clean anime character design model sheet."
+    },
+    {
+      "id": "char_turn_three_quarter_r",
+      "seed": 102,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body three-quarter right turn view of the young adult man. Messy black hair, grey crewneck t-shirt, olive-green sweatpants, barefoot. Same exact character proportions, clean model sheet line art."
+    },
+    {
+      "id": "char_turn_profile_r",
+      "seed": 103,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body profile right view of the young adult man standing. Messy black hair, grey crewneck t-shirt, olive-green sweatpants, barefoot. Precise anime model sheet reference."
+    },
+    {
+      "id": "char_turn_back_r",
+      "seed": 104,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body three-quarter back right view of the young adult man. Messy black hair, grey crewneck t-shirt from behind, olive-green sweatpants, barefoot. Clean line art."
+    },
+    {
+      "id": "char_turn_back",
+      "seed": 105,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body back view of the young adult man standing. Messy black hair, grey t-shirt, olive-green sweatpants, barefoot. Direct back view character model reference."
+    },
+    {
+      "id": "char_turn_back_l",
+      "seed": 106,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body three-quarter back left view of the young adult man. Messy black hair, grey t-shirt, olive-green sweatpants, barefoot."
+    },
+    {
+      "id": "char_turn_profile_l",
+      "seed": 107,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body profile left view of the young adult man standing. Messy black hair, grey crewneck t-shirt, olive-green sweatpants, barefoot."
+    },
+    {
+      "id": "char_turn_three_quarter_l",
+      "seed": 108,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Character turnaround sheet asset: full-body three-quarter left turn view of the young adult man. Messy black hair, grey t-shirt, olive-green sweatpants, barefoot."
+    },
+    {
+      "id": "hand_handle_approach",
+      "seed": 201,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Close-up cut-in shot of the bedroom door handle: the young man's right hand reaching forward, fingers hovering 2 inches away from the silver brass handle lever. Dim warm night rim light on fingers, dark wood door frame, anime cinematics."
+    },
+    {
+      "id": "hand_handle_grip_macro",
+      "seed": 202,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Macro detailed close-up shot of the young man's hand firmly gripping the horizontal door handle lever. Realistic hand anatomy, clean anime line art, knuckles flexing, latch mechanism clearly visible against the wood."
+    },
+    {
+      "id": "hand_handle_turn_down",
+      "seed": 203,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Close-up shot of the hand depressing the door handle lever 30 degrees downward, clicking the latch bolt open. Knuckles under tension, sliver of light beginning to appear along the door seam."
+    },
+    {
+      "id": "hand_handle_push_pull",
+      "seed": 204,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Medium close-up shot of the hand pulling the wooden bedroom door open inward towards the viewer. The edge of the door frame recedes, warm amber light spilling across the fingers from the open gap."
+    },
+    {
+      "id": "feet_bare_floor_step",
+      "seed": 205,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k1_sit_edge_05.png"],
+      "prompt": "Low-angle close-up shot of the young man's bare feet stepping onto the dark wooden bedroom floor next to slippers. Soft floor reflections, hem of olive-green sweatpants, quiet atmospheric night mood."
+    },
+    {
+      "id": "bed_edge_hand_plant",
+      "seed": 206,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k1_sit_edge_05.png"],
+      "prompt": "Close-up cut-in shot of the young man's hands pressing down into the mattress on the bed edge supporting his weight as he sits up. Rumpled bedsheet wrinkles under palms, desk lamp backlight."
+    },
+    {
+      "id": "bg_clean_plate_room",
+      "seed": 301,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Empty bedroom environment clean background plate. EXACT same high camera angle, framing, wooden floor, desk with computer monitors and glowing desk lamp, empty bed with rumpled blanket, closed door in background. NO PEOPLE, zero characters, completely unoccupied room."
+    },
+    {
+      "id": "bg_door_hallway_empty",
+      "seed": 302,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Empty bedroom environment with the door at back right swung fully open into the dim hallway. Warm golden hallway sconce light casting an elongated doorway spill onto the wooden floor. NO PEOPLE, zero characters, pristine background plate."
+    },
+    {
+      "id": "door_swing_15deg",
+      "seed": 303,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Same bedroom camera angle and layout: the bedroom door at back right is unlatched and cracked open 15 degrees. A thin sliver of warm hallway light cuts across the doorframe. Character seen from behind standing by the door."
+    },
+    {
+      "id": "door_swing_30deg",
+      "seed": 304,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Same bedroom camera angle: the door at back right is swung open 30 degrees toward the room. Moderate wedge of warm hallway light emerging onto the floor. Character seen from behind pulling the door."
+    },
+    {
+      "id": "door_swing_45deg",
+      "seed": 305,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Same bedroom camera angle: the door at back right is swung open 45 degrees. Hinge edge visible, warm ambient illumination expanding into the room. Character holding the handle from behind."
+    },
+    {
+      "id": "door_swing_60deg",
+      "seed": 306,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png"],
+      "prompt": "Same bedroom camera angle: the door at back right is swung open 60 degrees. Clear view of the outer hallway wallpaper and trim. Character stepping slightly forward into the doorway."
+    },
+    {
+      "id": "door_swing_75deg",
+      "seed": 307,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png"],
+      "prompt": "Same bedroom camera angle: the door at back right is swung open 75 degrees. Deep hallway perspective revealed, warm light flooding the back corner. Character standing in doorway silhouette."
+    },
+    {
+      "id": "door_hallway_spill_90deg",
+      "seed": 308,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png"],
+      "prompt": "Same bedroom camera angle: the door is fully open 90 degrees against the hallway wall. Rich warm lighting gradient spreading across the dark wooden bedroom floor. Character pausing at the threshold."
+    },
+    {
+      "id": "wan_ctrl_bed_wake",
+      "seed": 401,
+      "images": ["assets/references/ref3_latest_male_night.png"],
+      "prompt": "Wan I2V control key: same bedroom camera angle. The young man is in bed, eyes opened, head lifted from the pillow, starting to stir under the blanket. Night lighting, monitor glow."
+    },
+    {
+      "id": "wan_ctrl_wake_sit",
+      "seed": 402,
+      "images": ["output/keyframes/bedroom_door_r2_mid/aligned/m_a0_a1_04.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man is halfway sat up, torso elevated, blanket slipping down his waist, pushing up with one elbow. Fluid natural motion midpoint."
+    },
+    {
+      "id": "wan_ctrl_sit_edge",
+      "seed": 403,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k1_sit_edge_05.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man sitting firmly upright on the bed edge, feet touching down next to slippers, hands on mattress, pausing to orient himself."
+    },
+    {
+      "id": "wan_ctrl_rise_stand",
+      "seed": 404,
+      "images": ["output/keyframes/bedroom_door_r2_mid/aligned/m_a2_a3_03.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man in mid-rise transitioning from sitting to standing, knees slightly bent, weight shifting onto the balls of his feet."
+    },
+    {
+      "id": "wan_ctrl_walk_start",
+      "seed": 405,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k2_stand_05.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man standing erect between bed and desk chair, turning his torso and hips toward the back-right door, beginning the forward step."
+    },
+    {
+      "id": "wan_ctrl_walk_mid",
+      "seed": 406,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k3_walk_05.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man in full forward stride across the wooden floor toward the door, left arm swinging forward, right leg back, viewed from rear three-quarter."
+    },
+    {
+      "id": "wan_ctrl_door_reach",
+      "seed": 407,
+      "images": ["output/keyframes/bedroom_door_r2_mid/aligned/m_a4_a5_03.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man decelerating his stride right in front of the door, right arm raising and extending toward the brass handle."
+    },
+    {
+      "id": "wan_ctrl_door_turn",
+      "seed": 408,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man gripping the handle with his right hand, shoulder dropping slightly as he pushes the lever down, about to pull."
+    },
+    {
+      "id": "wan_ctrl_door_pull",
+      "seed": 409,
+      "images": ["output/keyframes/bedroom_door_r2_mid/aligned/m_a5_a6_05.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man stepping backward one pace as he pulls the door open inward, door at 35 degrees, warm hallway light washing over his right side."
+    },
+    {
+      "id": "wan_ctrl_door_open",
+      "seed": 410,
+      "images": ["output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png"],
+      "prompt": "Wan I2V control key: same camera angle. The young man standing at the threshold of the open door (70 degrees open), hallway illuminated, pausing before exiting. Shot end anchor."
+    }
+  ]
+}

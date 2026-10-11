@@ -1,0 +1,12 @@
+[
+  {
+    "id": "bedroom_test_k0_3_5s",
+    "image": "output/keyframes/bedroom_door_k0_redraw/aligned/k0_lying_00.png",
+    "prompt": "anime style, 1boy, messy black hair, lying in bed under blankets in dimly lit nighttime bedroom, opening eyes, begins sitting up, smooth continuous cinematic animation",
+    "negative": "static, still image, blurry, low quality, worst quality, deformed, bad anatomy, extra limbs, bad hands, photo, 3d render",
+    "seconds": 3.5,
+    "width": 832,
+    "height": 480,
+    "seed": 42
+  }
+]

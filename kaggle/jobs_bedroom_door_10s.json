@@ -1,0 +1,35 @@
+[
+  {
+    "id": "bed_door_part1_stand",
+    "image": "output/keyframes/bedroom_door_k0_redraw/aligned/k0_lying_00.png",
+    "end_image": "output/keyframes/bedroom_door_r1/aligned/k2_stand_05.png",
+    "prompt": "anime style, 1boy, messy black hair, wakes up in bed at night, smoothly swings legs out and stands up beside bed, continuous animation",
+    "negative": "static, still image, blurry, low quality, deformed, extra limbs, bad anatomy, ghosting, 3d render",
+    "seconds": 3.5,
+    "width": 832,
+    "height": 480,
+    "seed": 101
+  },
+  {
+    "id": "bed_door_part2_walk",
+    "image": "output/keyframes/bedroom_door_r1/aligned/k2_stand_05.png",
+    "end_image": "output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png",
+    "prompt": "anime style, 1boy, messy black hair, barefoot, walks forward across bedroom wooden floor toward bedroom door, steps smoothly",
+    "negative": "static, still image, blurry, low quality, deformed, extra limbs, bad anatomy, ghosting, 3d render",
+    "seconds": 3.5,
+    "width": 832,
+    "height": 480,
+    "seed": 202
+  },
+  {
+    "id": "bed_door_part3_door",
+    "image": "output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png",
+    "end_image": "output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png",
+    "prompt": "anime style, 1boy, messy black hair, reaches hand to door handle, turns metal handle and pushes bedroom door open revealing hallway",
+    "negative": "static, still image, blurry, low quality, deformed, extra limbs, bad anatomy, ghosting, 3d render",
+    "seconds": 3.5,
+    "width": 832,
+    "height": 480,
+    "seed": 303
+  }
+]

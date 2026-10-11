@@ -50,3 +50,19 @@ the Luminal credits (about $1,990 at the start) used heavily.
   plate, or a vision model (Gemini through `agy`) as the picker.
 - DeepSeek text endpoint: the base URL isn't on the public docs, and the user
   needs to copy it from the dashboard.
+
+## Update: the method X creators use (2026-10-11, evening)
+
+- Research (Firecrawl plus Gemini delegation, report pending at `docs/research/x-anime-workflows-2026-10.md`)
+  shows creators don't draw frame by frame. They generate a strong first frame,
+  animate it 5–15 s with an image-to-video model (Seedance 2.5, Kling 3/4, Veo 3.1,
+  MiniMax H3, or open Wan 2.x / LTX-2.3 / AniSora 3.2), keep the good takes and edit.
+- Open-weight Wan 2.2 on free Hugging Face ZeroGPU Spaces works from code:
+  - `zerogpu-aoti/wan2-2-fp8da-aoti-faster` (single image → video, 832×480, 3.5 s in about 35 s).
+    `output/wan/test_i2v_aoti.mp4` is the **first clip with real, solid motion**.
+  - `multimodalart/wan-2-2-first-last-frame` (first plus last keyframe), via `scripts/hf_wan_flf.py`.
+    It works, but smears mid-move on a 2 s large-pose gap.
+- Limit: the anonymous ZeroGPU quota is about 5 GPU-minutes a day (each call reserves 180 s). Scaling needs
+  an HF token, a free Kaggle GPU (30 h/week), or pay-per-use.
+- LTX-2B on the local Mac and frame-by-frame Ideogram flipbooks are superseded for motion.
+  Ideogram stays the keyframe and first-frame generator.

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "bed_door_part2_walk",
+    "image": "output/wan_final/part1_final_frame.png",
+    "end_image": "output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png",
+    "prompt": "Fixed static exterior window-frame shot, dim bedroom at night, camera does not move. Young man, short dark messy hair, grey t-shirt, olive-grey sweatpants, barefoot, stands fully upright beside the bed, turns toward the closed wooden door on the right, walks smoothly past the desk toward bedroom door, single continuous take.",
+    "negative": "static, still image, blurry, low quality, worst quality, deformed, extra limbs, bad anatomy, ghosting, 3d render, duplicate body",
+    "seconds": 3.5,
+    "width": 832,
+    "height": 480,
+    "seed": 202
+  },
+  {
+    "id": "bed_door_part3_door",
+    "image": "output/keyframes/bedroom_door_r1/aligned/k4_handle_01.png",
+    "end_image": "output/keyframes/bedroom_door_r1/aligned/k5_door_open_01.png",
+    "prompt": "Fixed static exterior window-frame shot, dim bedroom at night. Same young man grips door handle, turns handle, pushes bedroom door open smoothly revealing hallway, single continuous figure, no camera movement.",
+    "negative": "static, still image, blurry, low quality, worst quality, deformed, extra limbs, bad anatomy, ghosting, 3d render, duplicate body, floating handle",
+    "seconds": 3.0,
+    "width": 832,
+    "height": 480,
+    "seed": 303
+  }
+]
