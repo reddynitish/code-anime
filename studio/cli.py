@@ -12,11 +12,25 @@ import urllib.request
 from pathlib import Path
 
 from studio.assemble import AssembleError, assemble_project
+from studio.assets import (
+    REVIEW_STATES,
+    AssetError,
+    import_sidecars,
+    load_registry,
+    save_registry,
+)
 from studio.config import load_config
 from studio.doctor import format_report, run_doctor
 from studio.generate import GenerateError, generate_shot
 from studio.manifest import Project, ProjectError, create_project, load_project, save_project
 from studio.shotplan import default_bedroom_plan
+
+
+def _registry_dir(args: argparse.Namespace) -> Path:
+    """Resolve the asset registry directory (default: <projects_root>/assets)."""
+    if getattr(args, "registry_dir", None):
+        return Path(args.registry_dir)
+    return load_config().projects_root / "assets"
 
 
 def _pid_file_path(projects_root: Path) -> Path:
@@ -200,6 +214,66 @@ def cmd_server(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_assets_import(args: argparse.Namespace) -> int:
+    registry_dir = _registry_dir(args)
+    try:
+        registry = load_registry(registry_dir)
+        added = import_sidecars(registry, Path(args.sidecar_dir))
+        save_registry(registry_dir, registry)
+    except AssetError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(f"imported {len(added)} asset(s) into {registry_dir}:")
+    for a in added:
+        print(f"  {a.asset_id}  [{a.kind}]  {a.path}  review={a.review_state}")
+    return 0
+
+
+def cmd_assets_list(args: argparse.Namespace) -> int:
+    registry_dir = _registry_dir(args)
+    try:
+        registry = load_registry(registry_dir)
+    except AssetError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    assets = registry.assets
+    if args.kind:
+        assets = [a for a in assets if a.kind == args.kind]
+    if args.review_state:
+        assets = [a for a in assets if a.review_state == args.review_state]
+
+    if not assets:
+        print("no assets")
+        return 0
+    for a in assets:
+        cost = f"{a.cost.amount}{a.cost.unit}" + ("" if a.cost.recorded else " est")
+        ids = []
+        if a.character_id:
+            ids.append(f"char={a.character_id}")
+        if a.scene_id:
+            ids.append(f"scene={a.scene_id}")
+        id_str = (" " + " ".join(ids)) if ids else ""
+        print(
+            f"{a.asset_id}  [{a.kind}]  review={a.review_state}  cost={cost}"
+            f"{id_str}  model={a.model or '-'}  gen={a.generation_id or '-'}  {a.path}"
+        )
+    return 0
+
+
+def cmd_assets_review(args: argparse.Namespace) -> int:
+    registry_dir = _registry_dir(args)
+    try:
+        registry = load_registry(registry_dir)
+        asset = registry.set_review_state(args.asset_id, args.state)
+        save_registry(registry_dir, registry)
+    except AssetError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(f"{asset.asset_id}: review_state -> {asset.review_state}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="studio")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -238,6 +312,26 @@ def build_parser() -> argparse.ArgumentParser:
     p_srv.add_argument("action", choices=["start", "stop", "status"], default="status", nargs="?")
     p_srv.add_argument("--port", type=int, default=8787)
     p_srv.set_defaults(func=cmd_server)
+
+    p_assets = sub.add_parser("assets", help="manage the Luminal image asset registry")
+    assets_sub = p_assets.add_subparsers(dest="assets_command", required=True)
+
+    p_ai = assets_sub.add_parser("import", help="import keyframe job sidecars (*.json) from a directory")
+    p_ai.add_argument("sidecar_dir", help="directory containing *.json sidecar files")
+    p_ai.add_argument("--registry-dir", default=None, help="registry location (default: <projects_root>/assets)")
+    p_ai.set_defaults(func=cmd_assets_import)
+
+    p_al = assets_sub.add_parser("list", help="list registered assets")
+    p_al.add_argument("--registry-dir", default=None)
+    p_al.add_argument("--kind", default=None, help="filter by asset kind")
+    p_al.add_argument("--review-state", default=None, choices=list(REVIEW_STATES), help="filter by review state")
+    p_al.set_defaults(func=cmd_assets_list)
+
+    p_ar = assets_sub.add_parser("review", help="set an asset's review state")
+    p_ar.add_argument("asset_id")
+    p_ar.add_argument("state", choices=list(REVIEW_STATES))
+    p_ar.add_argument("--registry-dir", default=None)
+    p_ar.set_defaults(func=cmd_assets_review)
 
     return parser
 
